@@ -31,5 +31,9 @@ export async function loginUserService(email: string, password: string) {
   if (!isMatch) {
     throw new Error("invalid email or password!");
   }
-  return generateToken({ id: user.id, email: user.email, role: user.role });
+  return generateToken({
+    id: user.id,
+    email: user.email,
+    role: user.role,
+  });
 }
