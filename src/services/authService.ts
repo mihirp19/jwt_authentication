@@ -1,6 +1,7 @@
 import User from "../models/User";
+import { RefreshToken } from "../models/RefreshToken";
 import { comparePassword, hashPassword } from "../utils/password";
-import { generateToken } from "../utils/token";
+import { generateRefreshToken, generateToken } from "../utils/token";
 
 export async function registerUserService(data: {
   name: string;
@@ -31,9 +32,28 @@ export async function loginUserService(email: string, password: string) {
   if (!isMatch) {
     throw new Error("invalid email or password!");
   }
-  return generateToken({
+  const accessToken = generateToken({
     id: user.id,
     email: user.email,
     role: user.role,
   });
+
+  const refreshToken = generateRefreshToken({
+    id: user.id,
+    email: user.email,
+    role: user.role,
+  });
+
+  await RefreshToken.create({
+    token: refreshToken,
+    userId: user.id,
+  });
+
+  return { accessToken, refreshToken };
+}
+
+export async function refreshTokenService(token: string) {
+  const refToken = await RefreshToken.findOne({ where: { token } });
+
+  return refToken || null;
 }

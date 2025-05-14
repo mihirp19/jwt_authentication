@@ -36,8 +36,8 @@ export const validateUpdatePost = (
 ) => {
   const data = req.body;
 
-  const { title, content } = data;
-  if (typeof data !== "string" || data === null) {
+  const { title, description } = data;
+  if (typeof data !== "object" || data === null) {
     res.status(400).json({ error: "Invalid data format. Expected an object." });
     return;
   }
@@ -53,8 +53,8 @@ export const validateUpdatePost = (
   }
 
   if (
-    content !== undefined &&
-    (typeof content !== "string" || content.trim() === "")
+    description !== undefined &&
+    (typeof description !== "string" || description.trim() === "")
   ) {
     res
       .status(400)

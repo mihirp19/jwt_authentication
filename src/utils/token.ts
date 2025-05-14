@@ -1,36 +1,28 @@
 import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET || "secretKey";
+const JWT_REFRESH = process.env.JWT_REFRESH || "refreshTokenKey";
 
 export function generateToken(payload: {
   id: number;
   email: string;
   role: string;
 }): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: "10m" });
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: "5m" });
 }
 
 export function verifyToken(token: string): any {
   return jwt.verify(token, JWT_SECRET);
 }
 
-// import { SignJWT, jwtVerify } from "jose";
+export function generateRefreshToken(payload: {
+  id: number;
+  email: string;
+  role: string;
+}): string {
+  return jwt.sign(payload, JWT_REFRESH, { expiresIn: "1d" });
+}
 
-// const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
-
-// export async function generateToken(payload: {
-//   id: number;
-//   email: string;
-//   role: string;
-// }): Promise<string> {
-//   return await new SignJWT(payload)
-//     .setProtectedHeader({ alg: "HS256" })
-//     .setIssuedAt()
-//     .setExpirationTime("10m")
-//     .sign(JWT_SECRET);
-// }
-
-// export async function verifyToken(token: string): Promise<any> {
-//   const { payload } = await jwtVerify(token, JWT_SECRET);
-//   return payload;
-// }
+export function verifyRefreshToken(token: string): any {
+  return jwt.verify(token, JWT_REFRESH);
+}
