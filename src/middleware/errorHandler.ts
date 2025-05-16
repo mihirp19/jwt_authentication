@@ -7,6 +7,11 @@ export function errorHandler(
   next: NextFunction
 ) {
   console.error("Unhandled error:", err);
+
+  if (res.headersSent) {
+    return next(err);
+  }
+
   const statusCode = err.statusCode || 500;
   const errMessage = err.message || "Internal server error";
 

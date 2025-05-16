@@ -17,7 +17,7 @@ const postRoute = express.Router();
 
 postRoute.get("/", getPost);
 postRoute.get("/:id", getPostById);
-postRoute.post("/", authMiddleware, validateAddPost, addPost);
+postRoute.post("/", authMiddleware, checkPostOwner, validateAddPost, addPost);
 postRoute.put(
   "/:id",
   authMiddleware,

@@ -8,7 +8,7 @@ export function generateToken(payload: {
   email: string;
   role: string;
 }): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: "5m" });
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: "3h" });
 }
 
 export function verifyToken(token: string): any {

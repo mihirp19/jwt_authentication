@@ -14,7 +14,7 @@ export default function authMiddleware(
   const token = authHeader.split(" ")[1];
   try {
     const user = verifyToken(token);
-    (req as any).user = user;
+    req.user = user;
     next();
   } catch (error) {
     res.status(401).json({ error: "Unauthorized: Invalid token!" });

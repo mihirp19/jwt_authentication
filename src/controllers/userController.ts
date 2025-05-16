@@ -47,7 +47,11 @@ export async function addUser(req: Request, res: Response) {
 export async function updateUser(req: Request, res: Response) {
   const id = parseInt(req.params.id);
   const { name, password } = req.body;
-  const updatedUser = await updateUserService(id, { name, password });
+  const hashedPass = await hashPassword(password);
+  const updatedUser = await updateUserService(id, {
+    name,
+    password: hashedPass,
+  });
   if (updatedUser) {
     res.json(updatedUser);
   } else {

@@ -7,6 +7,7 @@ import postRoute from "./routes/postRoute";
 import authRoute from "./routes/authRoute";
 import { errorHandler } from "./middleware/errorHandler";
 import rateLimit from "express-rate-limit";
+import User from "./models/User";
 
 const app = express();
 
@@ -27,6 +28,13 @@ app.use("/users", userRoute);
 app.use("/posts", postRoute);
 
 app.use(errorHandler);
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User; // Adjust type based on your user model/interface
+    }
+  }
+}
 
 const start = async () => {
   try {
