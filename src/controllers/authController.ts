@@ -4,7 +4,6 @@ import {
   refreshTokenService,
   registerUserService,
 } from "../services/authService";
-import { getUserByIdService } from "../services/userService";
 import { generateToken } from "../utils/token";
 
 export async function register(req: Request, res: Response) {
@@ -44,19 +43,26 @@ export async function refreshTokenLogin(req: Request, res: Response) {
     const { token } = req.body;
     if (!token) {
       res.status(404).json({ message: "Token not found!" });
+      return;
     }
     const refreshToken = await refreshTokenService(token);
+
     if (!refreshToken) {
-      res.status(400).json({ message: "Invalid token!" });
+      res.status(403).json({ message: "Invalid token!" });
       return;
     }
-    const payload = await getUserByIdService(refreshToken.userId);
-    if (!payload) {
-      res.status(404).json({ message: "User not found!" });
-      return;
+    const { user, newRefToken } = refreshToken;
+
+    if (!user.id || !user.email || !user.role) {
+      throw new Error("Missing required user data for token generation");
     }
-    const newAccess = await generateToken(payload);
-    res.status(200).json({ newAccess });
+    const newAccess = generateToken({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    });
+
+    res.status(200).json({ newAccess, newRefToken });
   } catch (error: any) {
     res.status(401).json({ error: error.message });
   }

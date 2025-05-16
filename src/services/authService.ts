@@ -1,7 +1,11 @@
 import User from "../models/User";
 import { RefreshToken } from "../models/RefreshToken";
 import { comparePassword, hashPassword } from "../utils/password";
-import { generateRefreshToken, generateToken } from "../utils/token";
+import {
+  generateRefreshToken,
+  generateToken,
+  verifyToken,
+} from "../utils/token";
 
 export async function registerUserService(data: {
   name: string;
@@ -44,16 +48,52 @@ export async function loginUserService(email: string, password: string) {
     role: user.role,
   });
 
-  await RefreshToken.create({
-    token: refreshToken,
-    userId: user.id,
+  const existingToken = await RefreshToken.findOne({
+    where: { userId: user.id },
   });
+
+  if (!existingToken) {
+    await RefreshToken.create({
+      token: refreshToken,
+      userId: user.id,
+    });
+  } else {
+    await RefreshToken.update(
+      { token: refreshToken },
+      { where: { userId: user.id } }
+    );
+  }
 
   return { accessToken, refreshToken };
 }
 
 export async function refreshTokenService(token: string) {
-  const refToken = await RefreshToken.findOne({ where: { token } });
+  const refToken = await RefreshToken.findOne({
+    where: { token },
+    include: [{ model: User }],
+  });
+  if (!refToken || !refToken.User) {
+    return null;
+  }
+  const user = refToken.User;
 
-  return refToken || null;
+  // Revoke old token
+  await refToken.destroy();
+
+  // Create new Refresh Token
+  const newRefToken = generateRefreshToken({
+    id: user.id,
+    email: user.email,
+    role: user.role,
+  });
+
+  await RefreshToken.create({
+    token: newRefToken,
+    userId: user.id,
+  });
+
+  return {
+    user,
+    newRefToken,
+  };
 }

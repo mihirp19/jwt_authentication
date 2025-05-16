@@ -6,13 +6,23 @@ import userRoute from "./routes/userRoute";
 import postRoute from "./routes/postRoute";
 import authRoute from "./routes/authRoute";
 import { errorHandler } from "./middleware/errorHandler";
+import rateLimit from "express-rate-limit";
 
 const app = express();
+
+const authLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 10,
+  message: "Too many requests",
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 const PORT = process.env.PORT;
 
 app.use(express.json());
 
-app.use("/auth", authRoute);
+app.use("/auth", authLimiter, authRoute);
 app.use("/users", userRoute);
 app.use("/posts", postRoute);
 
@@ -22,9 +32,6 @@ const start = async () => {
   try {
     await sequelize.authenticate();
     console.log("database connected");
-    // await sequelize.sync();
-    // console.log("database synced!");
-
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });

@@ -30,7 +30,7 @@ export async function addPost(req: Request, res: Response) {
       return;
     }
     const addPost = await addPostService({ title, description, userId });
-    res.json(addPost);
+    res.status(201).json(addPost);
   } catch (error) {
     console.error("post adding error", error);
     res.status(500).json({ error: "Failed to add post", details: error });

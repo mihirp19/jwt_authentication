@@ -17,6 +17,9 @@ export class RefreshToken
   declare id: number;
   declare token: string;
   declare userId: number;
+  declare User?: User; // <-- Tell TypeScript about the optional association
+  declare email: string;
+  declare role: string;
 }
 
 RefreshToken.init(
