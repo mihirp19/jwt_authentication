@@ -10,7 +10,7 @@ export async function register(req: Request, res: Response) {
   try {
     const { name, email, password, role } = req.body;
     if (!name || !email || !password) {
-      res.status(400).json({ error: "Missing required fields" });
+      res.status(400).json({ error: "missing required fields" });
     }
 
     if (role && !["admin", "user"].includes(role)) {
@@ -28,6 +28,10 @@ export async function register(req: Request, res: Response) {
 export async function login(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
+    if (!email || !password) {
+      res.status(400).json({ error: "email and password are required" });
+      return;
+    }
     const { accessToken, refreshToken } = await loginUserService(
       email,
       password

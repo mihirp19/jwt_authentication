@@ -6,7 +6,7 @@ export async function checkPostOwner(
   res: Response,
   next: NextFunction
 ) {
-  const user = (req as any).user;
+  const user = req.user;
 
   if (!user) {
     res.status(401).json({ error: "Unauthorized, no user found" });
@@ -25,19 +25,18 @@ export async function checkPostOwner(
       next();
     } else {
       res.status(403).json({ error: "Forbidden, you do not have permission!" });
+      return;
     }
   }
 
   if (req.method === "POST") {
-    // if (req.body?.userId !== user.id) {
-    //   res.status(403).json({
-    //     error: "Forbidden, you cannot create a post for another user!",
-    //   });
-    //   return;
-    // } else {
-    //   next();
-    // }
-
-    req.user?.id;
+    if (req.body.userId !== user.id) {
+      res.status(403).json({
+        error: "Forbidden, you cannot create a post for another user!",
+      });
+      return;
+    } else {
+      next();
+    }
   }
 }

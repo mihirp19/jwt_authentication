@@ -1,11 +1,7 @@
 import User from "../models/User";
 import { RefreshToken } from "../models/RefreshToken";
 import { comparePassword, hashPassword } from "../utils/password";
-import {
-  generateRefreshToken,
-  generateToken,
-  verifyToken,
-} from "../utils/token";
+import { generateRefreshToken, generateToken } from "../utils/token";
 
 export async function registerUserService(data: {
   name: string;
