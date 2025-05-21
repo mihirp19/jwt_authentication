@@ -9,6 +9,10 @@ export async function registerUserService(data: {
   password: string;
   role?: "user" | "admin";
 }) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(data.email)) {
+    throw new Error("Invalid email format");
+  }
   const existingUser = await User.findOne({ where: { email: data.email } });
   if (existingUser) {
     throw new Error("email already exists");

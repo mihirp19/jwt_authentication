@@ -2,7 +2,7 @@ import { getMockReq, getMockRes } from "@jest-mock/express";
 import { register } from "../controllers/authController";
 import * as authService from "../services/authService";
 
-jest.mock("../../services/authService");
+jest.mock("../services/authService");
 
 describe("register controller", () => {
   const mockRequest = getMockReq({
