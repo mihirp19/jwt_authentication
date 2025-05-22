@@ -35,6 +35,6 @@ export async function deleteUserService(id: number) {
   if (!user) {
     return null;
   }
-  await user?.destroy();
+  await user.destroy();
   return true;
 }

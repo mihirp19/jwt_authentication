@@ -2,8 +2,6 @@ import { registerUserService } from "../services/authService";
 import { User, userMock } from "./mocks/sequelizeModelMock";
 import * as passwordUtil from "../utils/password";
 
-// jest.mock("../models/User");
-// jest.mock("../models/RefreshToken");
 jest.mock("../utils/password");
 
 describe("registerUser service", () => {

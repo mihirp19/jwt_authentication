@@ -8,6 +8,9 @@ export function generateToken(payload: {
   email: string;
   role: string;
 }): string {
+  if (!payload.id || !payload.email || !payload.role) {
+    throw new Error("Missing required fields");
+  }
   return jwt.sign(payload, JWT_SECRET, { expiresIn: "3h" });
 }
 
@@ -20,6 +23,9 @@ export function generateRefreshToken(payload: {
   email: string;
   role: string;
 }): string {
+  if (!payload.id || !payload.email || !payload.role) {
+    throw new Error("Missing required fields");
+  }
   return jwt.sign(payload, JWT_REFRESH, { expiresIn: "1d" });
 }
 

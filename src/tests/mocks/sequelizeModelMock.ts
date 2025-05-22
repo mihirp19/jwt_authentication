@@ -1,5 +1,6 @@
 import User from "../../models/User";
 import { RefreshToken } from "../../models/RefreshToken";
+import Post from "../../models/Post";
 
 const userMock = {
   name: "MockUser",
@@ -12,9 +13,14 @@ const userMock = {
 
 (User.findOne as jest.Mock) = jest.fn().mockResolvedValue(userMock);
 (User.create as jest.Mock) = jest.fn().mockResolvedValue(userMock);
+(User.findAll as jest.Mock) = jest.fn().mockResolvedValue(userMock);
+(User.findByPk as jest.Mock) = jest.fn().mockResolvedValue(userMock);
+(User.update as jest.Mock) = jest.fn().mockResolvedValue(userMock);
+
+(Post.findAll as jest.Mock) = jest.fn().mockResolvedValue(userMock);
 
 (RefreshToken.findOne as jest.Mock) = jest.fn().mockResolvedValue(userMock);
 (RefreshToken.create as jest.Mock) = jest.fn().mockResolvedValue(userMock);
 (RefreshToken.update as jest.Mock) = jest.fn().mockResolvedValue(userMock);
 
-export { User, RefreshToken, userMock };
+export { User, RefreshToken, Post, userMock };

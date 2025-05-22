@@ -9,7 +9,7 @@ import {
 
 export async function getPost(req: Request, res: Response) {
   const posts = await getPostService();
-  res.json(posts);
+  res.status(200).json(posts);
 }
 
 export async function getPostById(req: Request, res: Response) {

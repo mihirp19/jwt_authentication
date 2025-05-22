@@ -10,7 +10,7 @@ import { hashPassword } from "../utils/password";
 
 export async function getUser(req: Request, res: Response) {
   const users = await getUserService();
-  res.json(users);
+  res.status(200).json(users);
 }
 
 export async function getUserById(req: Request, res: Response) {
@@ -19,7 +19,7 @@ export async function getUserById(req: Request, res: Response) {
   if (!user) {
     res.status(404).json({ message: "User not found!" });
   } else {
-    res.json(user);
+    res.status(200).json(user);
   }
 }
 
@@ -30,6 +30,11 @@ export async function addUser(req: Request, res: Response) {
       res.status(400).json({ error: "Missing required fields" });
       return;
     }
+    const validRoles = ["user", "admin"];
+    if (role && !validRoles.includes(role)) {
+      return res.status(400).json({ error: "Invalid role" });
+    }
+
     const hashedPass = await hashPassword(password);
     const addUser = await addUserService({
       name,
@@ -37,7 +42,10 @@ export async function addUser(req: Request, res: Response) {
       password: hashedPass,
       role,
     });
-    res.json(addUser);
+    res.status(201).json({
+      message: "User created",
+      user: addUser,
+    });
   } catch (error) {
     console.error("user adding error", error);
     res.status(500).json({ error: "Failed to add user", details: error });
@@ -63,8 +71,8 @@ export async function deleteUser(req: Request, res: Response) {
   const id = parseInt(req.params.id);
   const deleteUser = await deleteUserService(id);
   if (deleteUser) {
-    res.json({ message: "User deleted!" });
+    res.status(200).json({ message: "User deleted!" });
   } else {
-    res.status(404).json({ message: "user not found!" });
+    res.status(404).json({ message: "User not found!" });
   }
 }
