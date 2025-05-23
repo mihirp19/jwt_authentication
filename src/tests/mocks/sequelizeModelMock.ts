@@ -18,6 +18,10 @@ const userMock = {
 (User.update as jest.Mock) = jest.fn().mockResolvedValue(userMock);
 
 (Post.findAll as jest.Mock) = jest.fn().mockResolvedValue(userMock);
+(Post.findOne as jest.Mock) = jest.fn().mockResolvedValue(userMock);
+(Post.create as jest.Mock) = jest.fn().mockResolvedValue(userMock);
+(Post.update as jest.Mock) = jest.fn().mockResolvedValue(userMock);
+(Post.findByPk as jest.Mock) = jest.fn().mockResolvedValue(userMock);
 
 (RefreshToken.findOne as jest.Mock) = jest.fn().mockResolvedValue(userMock);
 (RefreshToken.create as jest.Mock) = jest.fn().mockResolvedValue(userMock);

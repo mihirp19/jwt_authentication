@@ -18,7 +18,7 @@ export async function getPostById(req: Request, res: Response) {
   if (!post) {
     res.status(404).json({ message: "Post not found!" });
   } else {
-    res.json(post);
+    res.status(200).json(post);
   }
 }
 
@@ -42,7 +42,7 @@ export async function updatePost(req: Request, res: Response) {
   const { title, description } = req.body;
   const updatedPost = await updatePostService(id, { title, description });
   if (updatedPost) {
-    res.json(updatedPost);
+    res.status(200).json(updatedPost);
   } else {
     res.status(404).json({ message: "Post not found!" });
   }

@@ -102,6 +102,9 @@ describe("user controller", () => {
   });
 
   it("should return 500 internal server error", async () => {
+    const consoleSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
     (passwordUtils.hashPassword as jest.Mock).mockRejectedValue(
       new Error("Hashing failed")
     );
@@ -114,6 +117,7 @@ describe("user controller", () => {
         error: "Failed to add user",
       })
     );
+    consoleSpy.mockRestore();
   });
   //   Update User Cases
   it("should return 200 after update", async () => {

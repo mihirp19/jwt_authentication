@@ -35,6 +35,6 @@ export async function deletePostService(id: number) {
   if (!post) {
     return null;
   }
-  await post?.destroy();
+  await post.destroy();
   return true;
 }

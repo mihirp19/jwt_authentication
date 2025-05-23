@@ -32,7 +32,8 @@ export async function addUser(req: Request, res: Response) {
     }
     const validRoles = ["user", "admin"];
     if (role && !validRoles.includes(role)) {
-      return res.status(400).json({ error: "Invalid role" });
+      res.status(400).json({ error: "Invalid role" });
+      return;
     }
 
     const hashedPass = await hashPassword(password);
